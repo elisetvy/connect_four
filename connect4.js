@@ -65,8 +65,13 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return bottom empty y (null if filled) */
 
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 5
-  return 5;
+  for (let y = HEIGHT - 1; y >= 0; y--) {
+    if (board[y][x] === null) {
+      return y;
+    }
+  }
+
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -74,8 +79,8 @@ function findSpotForCol(x) {
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   const piece = document.createElement("div");
-  piece.classList.add("piece")
-  piece.classList.add(`p${currPlayer}`)
+  piece.classList.add("piece");
+  piece.classList.add(`p${currPlayer}`);
   const cell = document.getElementById(`c-${y}-${x}`);
   cell.append(piece);
   // put div inside this cell by creating div, then appending to cell
@@ -94,7 +99,7 @@ function endGame(msg) {
 function handleClick(evt) {
   // get x from ID of clicked cell
   // const x = +evt.target.id;
-  const x = Number(evt.target.id.slice(4))
+  const x = Number(evt.target.id.slice(4));
 
   // get next spot in column (if none, ignore click)
   const y = findSpotForCol(x);
@@ -113,7 +118,7 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-  if (board[0].every((ele) => ele !== null)) return endGame(`It's a tie!`)
+  if (board[0].every((ele) => ele !== null)) return endGame(`It's a tie!`);
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
@@ -147,8 +152,8 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];;
       let diagDR;
 
       // find winner (only checking each win-possibility as needed)
